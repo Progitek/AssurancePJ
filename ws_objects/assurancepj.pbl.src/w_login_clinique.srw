@@ -251,7 +251,7 @@ destroy(this.ln_1)
 destroy(this.ln_2)
 end on
 
-event open;String ls_commodbc, ls_sql, ls_commline, ls_repbydef, ls_LastUsedUsager
+event open;String ls_commodbc, ls_sql, ls_commline, ls_repbydef, ls_LastUsedUsager, ls_nameBD
 Long ll_pos, ll_id_usager
 Integer li_ret
 
@@ -267,7 +267,11 @@ if ls_commline = "" then
 	of_get_list_db()
 	ls_commodbc = ProfileString(ls_repbydef + "\assurancepj.ini", "Config", "odbc", '')
 	If ls_commodbc = "" Then 
-		ls_commodbc = 'dentitek'
+		ls_commodbc = dw_logininfo.Object.bd.values 
+		ls_commodbc = Left(ls_commodbc, Pos(ls_commodbc, '~t') - 1 )
+		If IsNull(ls_commodbc) Or ls_commodbc = "" Then
+			ls_commodbc = 'dentitek'
+		End If	
 	End If 	
 else
 	ll_pos = pos(ls_commline, ' ')

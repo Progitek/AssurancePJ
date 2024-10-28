@@ -1,2 +1,6 @@
 *.pbl
-*.ini
+assurancepj.ini
+*.pbd
+apj.xml
+apj.exe
+
