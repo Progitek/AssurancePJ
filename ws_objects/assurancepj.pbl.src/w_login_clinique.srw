@@ -55,6 +55,7 @@ public subroutine of_login (string as_password)
 public subroutine of_ok ()
 public function boolean of_connect_bd (string as_odbc)
 public subroutine of_maj_bd ()
+public subroutine of_get_list_db ()
 end prototypes
 
 public function long uf_fillusers ();DataWindowChild	dwc
@@ -194,6 +195,23 @@ End If
 Return 
 end subroutine
 
+public subroutine of_get_list_db ();Integer li_ret
+Long ll_Loop
+String	ls_subkeylist[], ls_ddlb
+
+li_ret = RegistryValues("HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\ODBC\ODBC.INI\ODBC Data Sources", ls_subkeylist)
+
+If UpperBound(ls_subkeylist) > 0 Then 
+	For ll_Loop = 1 to UpperBound(ls_subkeylist)
+		ls_ddlb += ls_subkeylist[ll_Loop] + "~t" + ls_subkeylist[ll_Loop] + "/"
+	Next 	
+	
+	dw_logininfo.Object.bd.values = ls_ddlb
+End If 
+
+Return 
+end subroutine
+
 on w_login_clinique.create
 this.p_1=create p_1
 this.uo_4=create uo_4
@@ -246,6 +264,7 @@ st_verprog.text  = 'Version ' +  gnv_app.of_getversion()
 ls_commline = gnv_app.inv_entrepotglobal.of_retournedonnee("commline")
 
 if ls_commline = "" then 
+	of_get_list_db()
 	ls_commodbc = ProfileString(ls_repbydef + "\assurancepj.ini", "Config", "odbc", '')
 	If ls_commodbc = "" Then 
 		ls_commodbc = 'dentitek'
