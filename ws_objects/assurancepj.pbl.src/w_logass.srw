@@ -486,12 +486,6 @@ next
 
 Return 0
 
-//if ll_count = 1 then
-//	Send(Handle(This), WM_SYSCOMMAND, SC_MINIMIZE, 0)
-//	return 1
-//else
-//	return 0
-//end if
 end event
 
 event pfc_postopen;this.center = true

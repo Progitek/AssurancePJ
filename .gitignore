@@ -1,6 +1,5 @@
 *.pbl
 assurancepj.ini
 *.pbd
-apj.xml
 apj.exe
-
+assurancepj.pbl
