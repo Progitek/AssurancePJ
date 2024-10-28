@@ -2,11 +2,11 @@
 forward
 global type w_login_clinique from window
 end type
+type p_1 from picture within w_login_clinique
+end type
 type uo_4 from uo_roundedbutton within w_login_clinique
 end type
 type uo_3 from uo_roundedbutton within w_login_clinique
-end type
-type st_1 from statictext within w_login_clinique
 end type
 type st_verbd from statictext within w_login_clinique
 end type
@@ -30,13 +30,14 @@ global type w_login_clinique from window
 integer width = 3689
 integer height = 2116
 boolean titlebar = true
+boolean controlmenu = true
 windowtype windowtype = popup!
 long backcolor = 553648127
 string icon = "AppIcon!"
 boolean center = true
+p_1 p_1
 uo_4 uo_4
 uo_3 uo_3
-st_1 st_1
 st_verbd st_verbd
 st_verprog st_verprog
 st_poste st_poste
@@ -194,9 +195,9 @@ Return
 end subroutine
 
 on w_login_clinique.create
+this.p_1=create p_1
 this.uo_4=create uo_4
 this.uo_3=create uo_3
-this.st_1=create st_1
 this.st_verbd=create st_verbd
 this.st_verprog=create st_verprog
 this.st_poste=create st_poste
@@ -205,9 +206,9 @@ this.dw_logininfo=create dw_logininfo
 this.shl_1=create shl_1
 this.ln_1=create ln_1
 this.ln_2=create ln_2
-this.Control[]={this.uo_4,&
+this.Control[]={this.p_1,&
+this.uo_4,&
 this.uo_3,&
-this.st_1,&
 this.st_verbd,&
 this.st_verprog,&
 this.st_poste,&
@@ -219,9 +220,9 @@ this.ln_2}
 end on
 
 on w_login_clinique.destroy
+destroy(this.p_1)
 destroy(this.uo_4)
 destroy(this.uo_3)
-destroy(this.st_1)
 destroy(this.st_verbd)
 destroy(this.st_verprog)
 destroy(this.st_poste)
@@ -268,6 +269,15 @@ End If
 Return 
 end event
 
+type p_1 from picture within w_login_clinique
+integer x = 549
+integer y = 112
+integer width = 2606
+integer height = 672
+string picturename = "title.png"
+boolean focusrectangle = false
+end type
+
 type uo_4 from uo_roundedbutton within w_login_clinique
 integer x = 2002
 integer y = 1416
@@ -303,23 +313,6 @@ end event
 
 event ue_clicked;call super::ue_clicked;Close(Parent)
 end event
-
-type st_1 from statictext within w_login_clinique
-integer x = 320
-integer y = 60
-integer width = 3104
-integer height = 812
-integer textsize = -40
-integer weight = 700
-fontpitch fontpitch = variable!
-fontfamily fontfamily = roman!
-string facename = "Cambria"
-long textcolor = 134217741
-boolean enabled = false
-string text = "Envoyer des pièces jointes aux compagnies d~'assurance"
-alignment alignment = center!
-boolean focusrectangle = false
-end type
 
 type st_verbd from statictext within w_login_clinique
 integer x = 3054
