@@ -1,0 +1,123 @@
+﻿$PBExportHeader$d_appmaster.srd
+release 22;
+datawindow(units=0 data.export.format=1 timer_interval=0 color=134217732 brushmode=0 transparency=0 gradient.angle=0 gradient.color=8421504 gradient.focus=0 gradient.repetition.count=0 gradient.repetition.length=100 gradient.repetition.mode=0 gradient.scale=100 gradient.spread=100 gradient.transparency=0 picture.blur=0 picture.clip.bottom=0 picture.clip.left=0 picture.clip.right=0 picture.clip.top=0 picture.mode=0 picture.scale.x=100 picture.scale.y=100 picture.transparency=0 processing=0 HTMLDW=no print.printername="" print.documentname="Liste de patients" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.background=no print.preview.background=no print.preview.outline=yes hidegrayline=no showbackcoloronxp=no picture.file="" )
+header(height=24 color="536870912" transparency="0" gradient.color="8421504" gradient.transparency="0" gradient.angle="0" brushmode="0" gradient.repetition.mode="0" gradient.repetition.count="0" gradient.repetition.length="100" gradient.focus="0" gradient.scale="100" gradient.spread="100" )
+summary(height=0 color="536870912" transparency="0" gradient.color="8421504" gradient.transparency="0" gradient.angle="0" brushmode="0" gradient.repetition.mode="0" gradient.repetition.count="0" gradient.repetition.length="100" gradient.focus="0" gradient.scale="100" gradient.spread="100" )
+footer(height=0 color="536870912" transparency="0" gradient.color="8421504" gradient.transparency="0" gradient.angle="0" brushmode="0" gradient.repetition.mode="0" gradient.repetition.count="0" gradient.repetition.length="100" gradient.focus="0" gradient.scale="100" gradient.spread="100" )
+detail(height=88 color="536870912" transparency="0" gradient.color="8421504" gradient.transparency="0" gradient.angle="0" brushmode="0" gradient.repetition.mode="0" gradient.repetition.count="0" gradient.repetition.length="100" gradient.focus="0" gradient.scale="100" gradient.spread="100" height.autosize=yes )
+table(column=(type=long updatewhereclause=yes identity=yes name=id_patient dbname="t_patients.id_patient" )
+ column=(type=char(50) updatewhereclause=yes name=nom dbname="t_patients.nom" )
+ column=(type=char(50) updatewhereclause=yes name=prenom dbname="t_patients.prenom" )
+ column=(type=char(25) updatewhereclause=yes name=langue dbname="t_patients.langue" )
+ column=(type=number updatewhereclause=yes name=dettes dbname="t_patients.dettes" )
+ column=(type=long updatewhereclause=yes name=nodos dbname="t_patients.nodos" )
+ column=(type=date updatewhereclause=yes name=datenais dbname="t_patients.datenais" )
+ column=(type=long updatewhereclause=yes name=id_specialist dbname="t_patients.id_specialist" )
+ column=(type=char(15) updatewhereclause=yes name=telres dbname="t_patients.telres" )
+ column=(type=char(15) updatewhereclause=yes name=telbur dbname="t_patients.telbur" )
+ column=(type=char(15) updatewhereclause=yes name=cellulaire dbname="t_patients.cellulaire" )
+ column=(type=char(15) updatewhereclause=yes name=autre dbname="t_patients.autre" )
+ column=(type=number updatewhereclause=yes name=actif dbname="t_patients.actif" )
+ column=(type=number updatewhereclause=yes name=inact dbname="t_patients.inact" )
+ column=(type=number updatewhereclause=yes name=dossurg dbname="t_patients.dossurg" )
+ column=(type=char(1000) updatewhereclause=yes name=raisonfermeture dbname="t_patients.raisonfermeture" )
+ column=(type=char(1000) updatewhereclause=yes name=raisoninactif dbname="t_patients.raisoninactif" )
+ column=(type=long updatewhereclause=yes name=infopataff dbname="infopataff" )
+ column=(type=decimal(2) updatewhereclause=yes name=soldecas dbname="soldecas" )
+ column=(type=decimal(2) updatewhereclause=yes name=soldeass dbname="soldeass" )
+ column=(type=long updatewhereclause=yes name=avoirass dbname="avoirass" )
+ column=(type=char(3) updatewhereclause=yes name=compte dbname="t_patients.compte" )
+ column=(type=char(50) updatewhereclause=yes name=clpat dbname="clpat" )
+ column=(type=char(50) updatewhereclause=yes name=nopatient dbname="t_patients.nopatient" )
+ column=(type=char(20) updatewhereclause=yes name=t_colors_etat_dossier dbname="t_colors.etat_dossier" )
+ column=(type=char(1000) updatewhereclause=yes name=listmemefamille dbname="listmemefamille" )
+ retrieve="  SELECT t_patients.id_patient,
+         t_patients.nom,
+         t_patients.prenom,
+         t_patients.langue,
+			t_patients.dettes,
+			t_patients.nodos,
+			t_patients.datenais,
+			t_patients.id_specialist,
+			t_patients.telres,
+			t_patients.telbur,
+			t_patients.cellulaire,
+			t_patients.autre,
+			t_patients.actif,
+			t_patients.inact,
+			t_patients.dossurg,
+			isnull(t_patients.raisonfermeture,'') as raisonfermeture,
+			isnull(t_patients.raisoninactif,'') as raisoninactif,
+			(select infopataff from t_optiongen) as infopataff,
+			(( select isnull(sum(isnull(t_factures.montant,0) * isnull(t_factures.qte,0) + isnull(t_factures.prixlab,0) + isnull(t_factures.prixlab2,0) + isnull(t_factures.monttps,0) + isnull(t_factures.monttvq,0)),0) 
+				from 	t_factures INNER JOIN t_visites ON t_factures.id_visit = t_visites.id_visit 
+				where t_visites.id_patient = t_patients.id_patient and
+						compte = 'cas' and
+						t_visites.typevisit <> 'O' and
+						t_visites.visitdate <= today()) 
+          - (select 	isnull(sum(isnull(montant,0)),0) 
+				from 		t_paiements 
+				where id_patient = t_patients.id_patient and
+						compte = 'cas')) as soldecas,
+			(( select isnull(sum(isnull(t_factures.montant,0) * isnull(t_factures.qte,0) + isnull(t_factures.prixlab,0) + isnull(t_factures.prixlab2,0) + isnull(t_factures.monttps,0) + isnull(t_factures.monttvq,0)),0) 
+				from 	t_factures INNER JOIN t_visites ON t_factures.id_visit = t_visites.id_visit 
+				where t_visites.id_patient = t_patients.id_patient and
+						compte = 'ass' and
+						t_visites.typevisit <> 'O' and
+						t_visites.visitdate <= today()) 
+          - (select 	isnull(sum(isnull(montant,0)),0) 
+				from 		t_paiements 
+				where id_patient = t_patients.id_patient and
+						compte = 'ass')) as soldeass,
+			(select * from t_assurances where id_patient = t_patients.id_patient) as avoirass,
+			t_patients.compte,
+			'' as clpat,
+         t_patients.nopatient, 
+			t_colors.nomsys as etat_dossier,
+			(
+				select list(inter.nom||' '||inter.prenom||' - '|| case t_interrelation.lienpar
+            															when 1 then 'Lui-méme'
+            															when 2 then 'Conjoint'
+            															when 3 then 'Enfant'
+            															when 4 then 'Parent'
+            															when 5 then 'Tuteur'
+            															when 6 then 'Frère - Soeur'
+            															when 7 then 'Cousin - Cousine'
+            															when 8 then 'Tante - Oncle'
+            															when 9 then 'Neveu - Nièce'
+            															when 10 then 'Grand - Parent'
+            															when 11 then 'Petit - enfant'
+            															when 12 then 'Autre'
+            															when 13 then 'Beau - père'
+            															when 14 then 'Belle - mère'
+            															when 15 then 'Beau - fils'
+            															when 16 then 'Belle - fille'
+            														end,char(10) ) listfamille  
+			from
+				t_patients left outer join t_personnes on t_patients.id_personne = t_personnes.id_personne
+          	 	left outer join t_interrelation on t_patients.id_personne = t_interrelation.id_personne1
+           		left outer join t_personnes as inter on t_interrelation.id_personne2 = inter.id_personne
+           		left outer join t_famille on inter.id_famille = t_famille.id_famille
+           		left outer join t_personnes as resp on resp.id_personne = t_personnes.id_responsable
+			where
+				t_famille.id_famille is not null
+			
+			) as listmemefamille
+	 FROM t_patients left outer join t_colors on t_colors.id_color = t_patients.validation
+ORDER BY t_patients.nom ASC,
+         t_patients.prenom ASC" )
+compute(band=detail alignment="0" expression="if( isnull( datenais ), '', string( year( today() ) - year( datenais ) - if( month( today() ) < month( datenais ), 1, if( month( today() ) = month( datenais ) and day( today() ) < day( datenais ) , 1, 0))) + if( month( today() ) - month( datenais ) - if( day( today() ) < day( datenais ), 1, 0) = 0, '', '.' + string( mod( month( today() ) - month( datenais ) - if( day( today() ) < day( datenais ), 1, 0) + 12, 12))))"border="0" color="0" x="50" y="104" height="64" width="215" format="[GENERAL]" html.valueishtml="0"  name=cp_age  tag="resize=n" visible="0"  font.face="Arial" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="8421504" background.transparency="0" background.gradient.color="8421504" background.gradient.transparency="0" background.gradient.angle="0" background.brushmode="0" background.gradient.repetition.mode="0" background.gradient.repetition.count="0" background.gradient.repetition.length="100" background.gradient.focus="0" background.gradient.scale="100" background.gradient.spread="100" tooltip.backcolor="134217752" tooltip.delay.initial="0" tooltip.delay.visible="32000" tooltip.enabled="0" tooltip.hasclosebutton="0" tooltip.icon="0" tooltip.isbubble="0" tooltip.maxwidth="0" tooltip.textcolor="134217751" tooltip.transparency="0" transparency="0" )
+roundrectangle(band=detail ellipseheight="20" ellipsewidth="9"x="123" y="4" height="76" width="1504"  name=rr_1  tag="resize=ar" visible="1" brush.hatch="6" brush.color="1073741824~tif( getTheme() = 'Flat Design Dark', if (getrow() = currentrow(), rgb(92,92,92), rgb(128,128,128) ),  if (getrow() = currentrow(), rgb(169,169,169), rgb(239,239,239) ))" pen.style="0" pen.width="5" pen.color="1073741824~tif (getrow() = currentrow(), rgb(92,92,92), rgb(128,128,128) )"  background.mode="2" background.color="33554432" background.transparency="0" background.gradient.color="8421504" background.gradient.transparency="0" background.gradient.angle="0" background.brushmode="0" background.gradient.repetition.mode="0" background.gradient.repetition.count="0" background.gradient.repetition.length="100" background.gradient.focus="0" background.gradient.scale="100" background.gradient.spread="100" tooltip.backcolor="134217752" tooltip.delay.initial="0" tooltip.delay.visible="32000" tooltip.enabled="0" tooltip.hasclosebutton="0" tooltip.icon="0" tooltip.isbubble="0" tooltip.maxwidth="0" tooltip.textcolor="134217751" tooltip.transparency="0" )
+compute(band=detail alignment="0" expression=" nom + ', ' +  prenom "border="0" color="0~tif(gettheme() = 'Flat Design Dark', rgb(255,255,255), 0)" x="128" y="8" height="68" width="1486" format="[GENERAL]" html.valueishtml="0"  name=nomcomplet  tag="resize=ar" visible="1"  font.face="Tahoma" font.height="-10~tif(currentrow()=getrow(),65,60)" font.weight="400~tif(currentrow()=getrow(),700,400)"  font.family="2" font.pitch="2" font.charset="0"font.italic="0~tif (  nodos < 0 , 1 , 0 )"  background.mode="1" background.color="536870912" background.transparency="0" background.gradient.color="15793151" background.gradient.transparency="0" background.gradient.angle="0" background.brushmode="0" background.gradient.repetition.mode="0" background.gradient.repetition.count="0" background.gradient.repetition.length="100" background.gradient.focus="0" background.gradient.scale="100" background.gradient.spread="100" tooltip.backcolor="134217752~tif( soldecas > 0, rgb(200,60,60),if( soldeass > 0,rgb(255,255,0),if( avoirass >= 1,rgb(0,180,0),if( compte = 'amq',rgb(80,80,255),if( compte = 'bes',rgb(230,230,255),rgb(255,250,200))))))" tooltip.delay.initial="200" tooltip.delay.visible="32000" tooltip.enabled="1" tooltip.hasclosebutton="0" tooltip.icon="0" tooltip.isbubble="0" tooltip.maxwidth="0" tooltip.textcolor="0" tooltip.tip="~tprenom  + ~" ~" + nom + ~"~~r~~nAge: ~"+ if( isnull( cp_age ), '', cp_age ) + ~"~~r~~n~" + if( gf_langue() = 'an', ~"File #: ~", ~"# Dossier: ~") + nodos + ~"~~r~~n~" + if( gf_langue() = 'an', ~"Phone #: ~", ~"# Tel: ~" ) + string( telres , '(@@@) @@@-@@@@') + if( isnull( t_colors_etat_dossier ), ~"~", ~"~~r~~n~" + t_colors_etat_dossier ) +  ~"~~r~~n --------------------~~r~~n~" +  listmemefamille " tooltip.transparency="0~tif( soldecas > 0, rgb(200,60,60),if( soldeass > 0,rgb(255,255,0),if( avoirass >= 1,rgb(0,180,0),if( compte = 'amq',rgb(80,80,255),if( compte = 'bes',rgb(230,230,255),rgb(255,250,200))))))" transparency="0" )
+roundrectangle(band=detail ellipseheight="32" ellipsewidth="32"x="14" y="12" height="64" width="69"  name=rr_2  tag="resize=n" visible="1" brush.hatch="6" brush.color="33554432~tif( soldecas > 0, rgb(200,32,32),if( soldeass > 0,rgb(255,255,0),if( avoirass >= 1,rgb(0,140,0),if( compte = 'amq',rgb(0,0,255),if( compte = 'bes',rgb(192,192,192),if(gettheme() = 'Flat Design Dark', rgb(40,40,40), rgb(255,255,255)))))))" pen.style="0" pen.width="5" pen.color="1073741824~tif (gettheme() = 'Flat Design Dark', rgb(40,40,40), rgb(255,255,255))"  background.mode="2" background.color="33554432" background.transparency="0" background.gradient.color="8421504" background.gradient.transparency="0" background.gradient.angle="0" background.brushmode="0" background.gradient.repetition.mode="0" background.gradient.repetition.count="0" background.gradient.repetition.length="100" background.gradient.focus="0" background.gradient.scale="100" background.gradient.spread="100" tooltip.backcolor="134217752" tooltip.delay.initial="0" tooltip.delay.visible="32000" tooltip.enabled="0" tooltip.hasclosebutton="0" tooltip.icon="0" tooltip.isbubble="0" tooltip.maxwidth="0" tooltip.textcolor="134217751" tooltip.transparency="0" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" nativepdf.customsize=0 nativepdf.customorientation=0 nativepdf.pdfstandard=0 nativepdf.useprintspec=no )
+export.xhtml()
+ 

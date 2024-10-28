@@ -1,0 +1,19 @@
+﻿$PBExportHeader$gf_sqlerr.srf
+global type gf_sqlerr from function_object
+end type
+
+forward prototypes
+global function boolean gf_sqlerr ()
+end prototypes
+
+global function boolean gf_sqlerr ();if (SQLCA.sqlCode <> 0) then
+	messagebox(string(today()) + ',' + string(now()) + string(SQLCA.SQLDBCode) ,SQLCA.SQLErrText)
+
+	// Si la connexion est perdue, on ferme l'application
+	if SQLCA.SQLCode = -308 then halt close
+	return false
+else
+	return true
+end if
+end function
+

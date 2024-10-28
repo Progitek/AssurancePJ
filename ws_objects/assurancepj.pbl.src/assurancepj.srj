@@ -1,0 +1,44 @@
+﻿$PBExportHeader$assurancepj.srj
+EXE:assurancepj.exe,,0,1,1,0,C:\Program Files (x86)\Appeon\Common\PowerBuilder\Runtime 22.1.0.2828
+CMP:0,0,0,2,0,0,1
+COM:Appeon
+DES:Appeon Product File
+CPY:
+PRD:PowerBuilder Enterprise Series
+PVS:1.0.0.1
+PVN:1,0,0,1
+FVS:1.0.0.1
+FVN:1,0,0,1
+MAN:0,asInvoker,0
+PBD:assurancepj.pbl,,1
+PBD:utils.pbl,,1
+PBD:pfc.pbl,,1
+OBJ:C:\projet\AssurancePJ\assurancepj.pbl,d_login_clinique,d
+OBJ:C:\projet\AssurancePJ\pfc.pbl,pfc_n_cst_numerical,u
+OBJ:C:\projet\AssurancePJ\utils.pbl,charvalue,f
+OBJ:C:\projet\AssurancePJ\utils.pbl,uo_roundedbutton,u
+OBJ:C:\projet\AssurancePJ\utils.pbl,remplir,f
+OBJ:C:\projet\AssurancePJ\assurancepj.pbl,uo_assurance,u
+OBJ:C:\projet\AssurancePJ\assurancepj.pbl,w_logass,w
+OBJ:C:\projet\AssurancePJ\assurancepj.pbl,d_logass,d
+OBJ:C:\projet\AssurancePJ\assurancepj.pbl,w_formass_attachement,w
+OBJ:C:\projet\AssurancePJ\utils.pbl,gf_sqlerr,f
+OBJ:C:\projet\AssurancePJ\utils.pbl,remplir_blanc,f
+OBJ:C:\projet\AssurancePJ\assurancepj.pbl,w_main,w
+OBJ:C:\projet\AssurancePJ\assurancepj.pbl,assurancepj,a
+OBJ:C:\projet\AssurancePJ\pfc.pbl,pro_n_cst_entrepotglobal,u
+OBJ:C:\projet\AssurancePJ\assurancepj.pbl,w_login_clinique,w
+OBJ:C:\projet\AssurancePJ\assurancepj.pbl,d_dossfin,d
+OBJ:C:\projet\AssurancePJ\utils.pbl,remplir_zerosign,f
+OBJ:C:\projet\AssurancePJ\utils.pbl,split,f
+OBJ:C:\projet\AssurancePJ\pfc.pbl,pro_n_cst_entrepot,u
+OBJ:C:\projet\AssurancePJ\utils.pbl,remplir_zero,f
+OBJ:C:\projet\AssurancePJ\pfc.pbl,pfc_n_cst_string,u
+OBJ:C:\projet\AssurancePJ\utils.pbl,str_shellexecuteinfo,s
+OBJ:C:\projet\AssurancePJ\utils.pbl,normalisestring,f
+OBJ:C:\projet\AssurancePJ\pfc.pbl,pfc_n_base,u
+OBJ:C:\projet\AssurancePJ\assurancepj.pbl,d_appmaster,d
+OBJ:C:\projet\AssurancePJ\assurancepj.pbl,d_formass_attachment,d
+OBJ:C:\projet\AssurancePJ\utils.pbl,n_cst_syncproc,u
+OBJ:C:\projet\AssurancePJ\assurancepj.pbl,n_cst_appmanager,u
+OBJ:C:\projet\AssurancePJ\assurancepj.pbl,d_envoiass_log_test,d

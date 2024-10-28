@@ -1,0 +1,27 @@
+﻿$PBExportHeader$normalisestring.srf
+global type normalisestring from function_object
+end type
+
+forward prototypes
+global function string normalisestring (integer ai_len, string as_string)
+end prototypes
+
+global function string normalisestring (integer ai_len, string as_string);int i, li_char
+long ll_len
+string ls_string, ls_chaine
+string ls_char
+
+ls_chaine = left(as_string,ai_len)
+for i = 1 to len(ls_chaine)
+	ls_char = mid(ls_chaine,i,1)
+	li_char = charvalue(ls_char)
+	if li_char = 1000 then
+		ls_string += ls_char
+	else
+		ls_string += string(charA(li_char))
+	end if
+next
+ls_string = remplir_blanc(ai_len,ls_string)
+return ls_string
+end function
+
