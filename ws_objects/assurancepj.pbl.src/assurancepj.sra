@@ -40,6 +40,59 @@ string webview2url = "https://developer.microsoft.com/en-us/microsoft-edge/webvi
 end type
 global assurancepj assurancepj
 
+forward prototypes
+public subroutine of_createshortcut ()
+end prototypes
+
+public subroutine of_createshortcut ();Boolean lb_shortcut_created, lb_shortcut_ignore
+Integer li_ret
+Long li_rc
+String ls_desktop, ls_repCurrent
+
+OLEObject lole_Shell
+OLEObject lole_Shortcut
+
+ls_repCurrent = GetCurrentDirectory() 
+lb_shortcut_created = ProfileString(ls_repCurrent + "\assurancepj.ini", "Shortcut", "Created", '0') = '1'
+lb_shortcut_ignore  = ProfileString(ls_repCurrent + "\assurancepj.ini", "Shortcut", "Ignore", '0') = '1'
+
+If lb_shortcut_created or lb_shortcut_ignore Then Return 
+
+Try
+	// Create an instance of the WScript.Shell
+	lole_Shell = CREATE OLEObject
+	li_rc = lole_Shell.ConnectToNewObject("WScript.Shell")
+	
+	ls_desktop = lole_Shell.SpecialFolders("Desktop")
+	
+	If Not FileExists(ls_desktop + "\apj.lnk") Then
+		
+		// Create a shortcut
+		lole_Shortcut = lole_Shell.CreateShortcut(ls_desktop + "\APJ.lnk")
+		
+		// Set properties for the shortcut
+		lole_Shortcut.TargetPath = "C:\ii4net\APJ\apj.exe"
+		lole_Shortcut.WindowStyle = 1
+		lole_Shortcut.Description = "Envoi de pièces jointes aux assureurs"
+		lole_Shortcut.WorkingDirectory = "C:\ii4net\APJ"
+		lole_Shortcut.IconLocation = "C:\ii4net\APJ\favicon.ico" 
+		lole_Shortcut.Save
+		
+		// Clean up
+		lole_Shell.DisconnectObject()
+		Destroy(lole_Shell)
+		Destroy(lole_Shortcut)
+	End If
+	
+	SetProfileString(ls_repCurrent + "\assurancepj.ini", "Shortcut", "Created", '1')
+Catch (RunTimeError ex)
+	//
+	li_ret = li_ret
+End Try	
+
+Return
+end subroutine
+
 on assurancepj.create
 appname="assurancepj"
 message=create message
@@ -62,6 +115,8 @@ Long ll_pos
 
 gnv_app = create n_cst_appmanager 
 gs_langue = 'fr'
+
+of_createshortcut()
 
 ls_commline = commandline
 

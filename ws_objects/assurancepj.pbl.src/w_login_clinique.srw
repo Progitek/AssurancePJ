@@ -158,6 +158,7 @@ SQLCA.LOCK		  = "0"
 
 SQLCA.DbParm  = "Async = 1, ConnectString='DSN="+as_odbc+";UID=dba;PWD=ii4pr0g1+3k01',ConnectOption='SQL_DRIVER_CONNECT,SQL_DRIVER_NOPROMPT'"
 
+disconnect using SQLCA;
 connect using SQLCA;
 if sqlca.sqlcode <> 0 then
 	MessageBox ("Erreur", "Impossible de se connecter à la base de données " + as_odbc + ".~r~n~r~nAssurez-vous d'avoir accès à cette base de données ou modifiez le nom de la base de données dans la fenêtre de connexion.~r~n~r~nMessage : " +  sqlca.sqlerrtext)
@@ -197,13 +198,21 @@ end subroutine
 
 public subroutine of_get_list_db ();Integer li_ret
 Long ll_Loop
-String	ls_subkeylist[], ls_ddlb
+String	ls_subkeylist[], ls_ddlb, ls_odbc, ls_val
 
-li_ret = RegistryValues("HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\ODBC\ODBC.INI\ODBC Data Sources", ls_subkeylist)
+li_ret = RegistryKeys("HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\ODBC\ODBC.INI", ls_subkeylist)
 
 If UpperBound(ls_subkeylist) > 0 Then 
 	For ll_Loop = 1 to UpperBound(ls_subkeylist)
-		ls_ddlb += ls_subkeylist[ll_Loop] + "~t" + ls_subkeylist[ll_Loop] + "/"
+		ls_odbc = ls_subkeylist[ll_Loop]
+		If ls_odbc = "ODBC Data Sources" Then Continue
+		
+		ls_val = ''
+		li_ret = RegistryGet("HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\ODBC\ODBC.INI\" + ls_odbc, "DatabaseName", RegString!,  ls_val)
+		
+		If Lower(ls_val) = "dentitek" Then 
+			ls_ddlb += ls_subkeylist[ll_Loop] + "~t" + ls_subkeylist[ll_Loop] + "/"
+		End If 	
 	Next 	
 	
 	dw_logininfo.Object.bd.values = ls_ddlb
