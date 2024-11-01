@@ -2,6 +2,32 @@
 forward
 global type w_main from window
 end type
+type tab_finance from tab within w_main
+end type
+type tabpage_fact from userobject within tab_finance
+end type
+type dw_dossfin from datawindow within tabpage_fact
+end type
+type gb_4 from groupbox within tabpage_fact
+end type
+type tabpage_fact from userobject within tab_finance
+dw_dossfin dw_dossfin
+gb_4 gb_4
+end type
+type tabpage_pt from userobject within tab_finance
+end type
+type dw_listplan from datawindow within tabpage_pt
+end type
+type gb_2 from groupbox within tabpage_pt
+end type
+type tabpage_pt from userobject within tab_finance
+dw_listplan dw_listplan
+gb_2 gb_2
+end type
+type tab_finance from tab within w_main
+tabpage_fact tabpage_fact
+tabpage_pt tabpage_pt
+end type
 type st_2 from statictext within w_main
 end type
 type st_verprog from statictext within w_main
@@ -11,8 +37,6 @@ end type
 type rb_itrans from radiobutton within w_main
 end type
 type dw_log_assurance from datawindow within w_main
-end type
-type dw_dossfin from datawindow within w_main
 end type
 type cb_send_files from commandbutton within w_main
 end type
@@ -26,8 +50,6 @@ type sle_rech from singlelineedit within w_main
 end type
 type dw_appmaster from datawindow within w_main
 end type
-type gb_2 from groupbox within w_main
-end type
 type gb_3 from groupbox within w_main
 end type
 type rr_11 from roundrectangle within w_main
@@ -37,8 +59,8 @@ end type
 end forward
 
 global type w_main from window
-integer width = 5614
-integer height = 2792
+integer width = 5641
+integer height = 2904
 boolean titlebar = true
 string title = "Assurance PJ"
 boolean controlmenu = true
@@ -47,19 +69,18 @@ boolean resizable = true
 string icon = "favicon.ico"
 boolean center = true
 event ue_find ( string fs_pat,  string fs_pat2 )
+tab_finance tab_finance
 st_2 st_2
 st_verprog st_verprog
 rb_ccd rb_ccd
 rb_itrans rb_itrans
 dw_log_assurance dw_log_assurance
-dw_dossfin dw_dossfin
 cb_send_files cb_send_files
 cb_fermer cb_fermer
 st_1 st_1
 shl_rech shl_rech
 sle_rech sle_rech
 dw_appmaster dw_appmaster
-gb_2 gb_2
 gb_3 gb_3
 rr_11 rr_11
 gb_1 gb_1
@@ -71,6 +92,7 @@ Long il_id_patid
 Long il_idvisit
 Long il_idspec
 Long il_itrans
+Long il_idplantraitement
 end variables
 
 forward prototypes
@@ -187,6 +209,7 @@ ll_id_assentete_parent = gnv_app.inv_entrepotglobal.of_retournedonnee("IdOfLastA
 
 select isnull(max(id_envoi),0) + 1 into :ll_idenvoi from t_assentete;
 luo_ass.of_setvisite(il_idvisit)
+luo_ass.of_setidplan(il_idplantraitement)
 luo_ass.of_setspecialiste(il_idspec)
 luo_ass.of_setpatient(il_id_patid)
 luo_ass.of_setidenvoi(ll_idenvoi)
@@ -249,54 +272,51 @@ Return
 end subroutine
 
 on w_main.create
+this.tab_finance=create tab_finance
 this.st_2=create st_2
 this.st_verprog=create st_verprog
 this.rb_ccd=create rb_ccd
 this.rb_itrans=create rb_itrans
 this.dw_log_assurance=create dw_log_assurance
-this.dw_dossfin=create dw_dossfin
 this.cb_send_files=create cb_send_files
 this.cb_fermer=create cb_fermer
 this.st_1=create st_1
 this.shl_rech=create shl_rech
 this.sle_rech=create sle_rech
 this.dw_appmaster=create dw_appmaster
-this.gb_2=create gb_2
 this.gb_3=create gb_3
 this.rr_11=create rr_11
 this.gb_1=create gb_1
-this.Control[]={this.st_2,&
+this.Control[]={this.tab_finance,&
+this.st_2,&
 this.st_verprog,&
 this.rb_ccd,&
 this.rb_itrans,&
 this.dw_log_assurance,&
-this.dw_dossfin,&
 this.cb_send_files,&
 this.cb_fermer,&
 this.st_1,&
 this.shl_rech,&
 this.sle_rech,&
 this.dw_appmaster,&
-this.gb_2,&
 this.gb_3,&
 this.rr_11,&
 this.gb_1}
 end on
 
 on w_main.destroy
+destroy(this.tab_finance)
 destroy(this.st_2)
 destroy(this.st_verprog)
 destroy(this.rb_ccd)
 destroy(this.rb_itrans)
 destroy(this.dw_log_assurance)
-destroy(this.dw_dossfin)
 destroy(this.cb_send_files)
 destroy(this.cb_fermer)
 destroy(this.st_1)
 destroy(this.shl_rech)
 destroy(this.sle_rech)
 destroy(this.dw_appmaster)
-destroy(this.gb_2)
 destroy(this.gb_3)
 destroy(this.rr_11)
 destroy(this.gb_1)
@@ -327,6 +347,220 @@ if key = KeyEnter! and trim(sle_rech.text) <> '' then
 end if
 end event
 
+type tab_finance from tab within w_main
+integer x = 1819
+integer y = 24
+integer width = 3749
+integer height = 1360
+integer taborder = 30
+integer textsize = -10
+integer weight = 400
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "Tahoma"
+boolean raggedright = true
+boolean focusonbuttondown = true
+integer selectedtab = 1
+tabpage_fact tabpage_fact
+tabpage_pt tabpage_pt
+end type
+
+on tab_finance.create
+this.tabpage_fact=create tabpage_fact
+this.tabpage_pt=create tabpage_pt
+this.Control[]={this.tabpage_fact,&
+this.tabpage_pt}
+end on
+
+on tab_finance.destroy
+destroy(this.tabpage_fact)
+destroy(this.tabpage_pt)
+end on
+
+event selectionchanged;Long ll_idtrait
+
+Choose Case  newindex
+	Case 1 
+		SetNull(il_idplantraitement)
+		select id_traitement into :ll_idtrait from t_traitements where id_patient = :il_id_patid and phase = 0;
+		tab_finance.tabpage_fact.dw_dossfin.retrieve(il_id_patid, ll_idtrait) 
+		If tab_finance.tabpage_fact.dw_dossfin.RowCount() > 1 Then tab_finance.tabpage_fact.dw_dossfin.SelectRow(1, True)
+	Case 2
+		SetNull(il_idvisit)
+		tab_finance.tabpage_pt.dw_listplan.retrieve(il_id_patid) 
+		If tab_finance.tabpage_pt.dw_listplan.RowCount() > 1 Then tab_finance.tabpage_pt.dw_listplan.SelectRow(1, True)
+End Choose
+
+Return 
+end event
+
+type tabpage_fact from userobject within tab_finance
+integer x = 18
+integer y = 112
+integer width = 3712
+integer height = 1232
+string text = "Facture"
+long tabtextcolor = 33554432
+long tabbackcolor = 1073741824
+long picturemaskcolor = 536870912
+dw_dossfin dw_dossfin
+gb_4 gb_4
+end type
+
+on tabpage_fact.create
+this.dw_dossfin=create dw_dossfin
+this.gb_4=create gb_4
+this.Control[]={this.dw_dossfin,&
+this.gb_4}
+end on
+
+on tabpage_fact.destroy
+destroy(this.dw_dossfin)
+destroy(this.gb_4)
+end on
+
+type dw_dossfin from datawindow within tabpage_fact
+integer x = 46
+integer y = 92
+integer width = 3630
+integer height = 1116
+integer taborder = 30
+string title = "none"
+string dataobject = "d_dossfin"
+boolean vscrollbar = true
+boolean livescroll = true
+borderstyle borderstyle = stylelowered!
+end type
+
+event clicked;If row < 1 Then Return 
+
+This.SelectRow(0, False)
+This.SelectRow(row, True)
+
+If row = 1 Then  This.Event RowFocuschanged(1)
+end event
+
+event constructor;setRowFocusIndicator(focusrect!)
+This.SetTransObject(sqlca)
+end event
+
+event rowfocuschanged;Long ll_ret
+
+if currentrow < 1 Then Return 
+
+dw_log_assurance.SetRedraw(False)
+
+il_idvisit = This.GetItemNumber(currentrow, "idvisit")
+il_idspec = This.GetItemNumber(currentrow, "t_visites_id_specialist")
+
+ll_ret = dw_log_assurance.retrieve(il_idvisit, -1) 
+
+ll_ret = dw_log_assurance.ScrollToRow(ll_ret) 
+
+dw_log_assurance.SetRedraw(True)
+
+uf_set_btns()
+end event
+
+type gb_4 from groupbox within tabpage_fact
+integer x = 14
+integer y = 8
+integer width = 3689
+integer height = 1220
+integer taborder = 10
+integer textsize = -10
+integer weight = 400
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "Tahoma"
+long textcolor = 33554432
+long backcolor = 553648127
+string text = "Liste des factures du patient sélectionné"
+end type
+
+type tabpage_pt from userobject within tab_finance
+integer x = 18
+integer y = 112
+integer width = 3712
+integer height = 1232
+string text = "Plan de traitement"
+long tabtextcolor = 33554432
+long tabbackcolor = 1073741824
+long picturemaskcolor = 536870912
+dw_listplan dw_listplan
+gb_2 gb_2
+end type
+
+on tabpage_pt.create
+this.dw_listplan=create dw_listplan
+this.gb_2=create gb_2
+this.Control[]={this.dw_listplan,&
+this.gb_2}
+end on
+
+on tabpage_pt.destroy
+destroy(this.dw_listplan)
+destroy(this.gb_2)
+end on
+
+type dw_listplan from datawindow within tabpage_pt
+event retrieve ( )
+integer x = 46
+integer y = 92
+integer width = 3630
+integer height = 1116
+integer taborder = 20
+string title = "none"
+string dataobject = "d_listplanfact"
+boolean livescroll = true
+borderstyle borderstyle = stylelowered!
+end type
+
+event constructor;setRowFocusIndicator(focusrect!)
+This.SetTransObject(sqlca)
+end event
+
+event clicked;If row < 1 Then Return 
+
+This.SelectRow(0, False)
+This.SelectRow(row, True)
+
+If row = 1 Then  This.Event RowFocuschanged(1)
+end event
+
+event rowfocuschanged;Long ll_ret
+
+if currentrow < 1 Then Return 
+
+il_idplantraitement = This.GetItemNumber(currentrow, "id_plantraitement")
+il_idspec = This.GetItemNumber(currentrow, "id_specialist")
+
+ll_ret = dw_log_assurance.retrieve(-1, il_idplantraitement) 
+
+ll_ret = dw_log_assurance.ScrollToRow(ll_ret) 
+
+uf_set_btns()
+end event
+
+type gb_2 from groupbox within tabpage_pt
+integer x = 14
+integer y = 8
+integer width = 3689
+integer height = 1220
+integer taborder = 40
+integer textsize = -10
+integer weight = 400
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "Tahoma"
+long textcolor = 33554432
+long backcolor = 553648127
+string text = "Liste des factures du patient sélectionné"
+end type
+
 type st_2 from statictext within w_main
 integer x = 713
 integer y = 16
@@ -346,7 +580,7 @@ end type
 
 type st_verprog from statictext within w_main
 integer x = 41
-integer y = 2584
+integer y = 2688
 integer width = 590
 integer height = 64
 integer textsize = -10
@@ -362,7 +596,7 @@ end type
 type rb_ccd from radiobutton within w_main
 boolean visible = false
 integer x = 2459
-integer y = 2556
+integer y = 2664
 integer width = 375
 integer height = 88
 integer textsize = -16
@@ -379,7 +613,7 @@ end type
 type rb_itrans from radiobutton within w_main
 boolean visible = false
 integer x = 1947
-integer y = 2556
+integer y = 2664
 integer width = 512
 integer height = 88
 integer textsize = -16
@@ -395,9 +629,9 @@ boolean checked = true
 end type
 
 type dw_log_assurance from datawindow within w_main
-integer x = 1879
-integer y = 1376
-integer width = 3630
+integer x = 1851
+integer y = 1496
+integer width = 3689
 integer height = 1096
 integer taborder = 20
 string title = "none"
@@ -556,51 +790,9 @@ li_ret = luo_sync.of_RunAndWait('"' + ls_nomdoc + '"')
 Return
 end event
 
-type dw_dossfin from datawindow within w_main
-integer x = 1879
-integer y = 140
-integer width = 3630
-integer height = 1088
-integer taborder = 20
-string title = "none"
-string dataobject = "d_dossfin"
-boolean vscrollbar = true
-boolean livescroll = true
-borderstyle borderstyle = stylelowered!
-end type
-
-event constructor;setRowFocusIndicator(focusrect!)
-This.SetTransObject(sqlca)
-end event
-
-event rowfocuschanged;Long ll_ret
-
-if currentrow < 1 Then Return 
-
-dw_log_assurance.SetRedraw(False)
-
-il_idvisit = This.GetItemNumber(currentrow, "idvisit")
-il_idspec = This.GetItemNumber(currentrow, "t_visites_id_specialist")
-
-ll_ret = dw_log_assurance.retrieve(il_idvisit) 
-
-ll_ret = dw_log_assurance.ScrollToRow(ll_ret) 
-
-dw_log_assurance.SetRedraw(True)
-
-uf_set_btns()
-end event
-
-event clicked;If row < 1 Then Return 
-
-This.SelectRow(0, False)
-This.SelectRow(row, True)
-
-end event
-
 type cb_send_files from commandbutton within w_main
-integer x = 3973
-integer y = 2552
+integer x = 4000
+integer y = 2648
 integer width = 978
 integer height = 112
 integer taborder = 30
@@ -674,14 +866,19 @@ gnv_app.inv_entrepotglobal.of_ajoutedonnee("ListeFichiers", ls_listeFichiers)
 
 of_sendattachments(ll_id_factures)
 
-dw_dossfin.Post Event RowFocusChanged(dw_dossfin.GetRow())
+Choose Case tab_finance.SelectedTab
+	Case 1 
+		tab_finance.tabpage_fact.dw_dossfin.Post Event RowFocusChanged(tab_finance.tabpage_fact.dw_dossfin.GetRow())	
+	Case 2
+		tab_finance.tabpage_pt.dw_listplan.Post Event RowFocusChanged(tab_finance.tabpage_pt.dw_listplan.GetRow())	
+End Choose
 
 Return 
 end event
 
 type cb_fermer from commandbutton within w_main
-integer x = 4997
-integer y = 2552
+integer x = 5024
+integer y = 2648
 integer width = 553
 integer height = 112
 integer taborder = 20
@@ -783,7 +980,7 @@ event ue_find ( string fs_pat )
 integer x = 41
 integer y = 236
 integer width = 1742
-integer height = 2264
+integer height = 2384
 integer taborder = 10
 string title = "none"
 string dataobject = "d_appmaster"
@@ -889,51 +1086,29 @@ event rowfocuschanged;Long ll_idtrait
 
 if currentrow < 1 Then Return 
 
-dw_dossfin.SetRedraw(False) 
-
 il_id_patid = dw_appmaster.GetItemNumber(currentrow, "id_patient")
-select id_traitement into :ll_idtrait from t_traitements where id_patient = :il_id_patid and phase = 0;
 
-dw_dossfin.retrieve(il_id_patid, ll_idtrait) 
+dw_log_assurance.Reset()
+tab_finance.tabpage_fact.dw_dossfin.Reset()
+tab_finance.tabpage_pt.dw_listplan.Reset()
 
-dw_dossfin.SetRedraw(True)
+tab_finance.Event SelectionChanged(1, tab_finance.SelectedTab)
+
+Return
 end event
 
 event clicked;Long ll_patient, ll_idtrait, ll_ret
 
-if row < 1 Then Return 
+if row = 1 Then
+	This.event rowfocuschanged(row)
+End If 
 
-dw_dossfin.SetRedraw(False)
-
-ll_patient = dw_appmaster.GetItemNumber(row, "id_patient")
-select id_traitement into :ll_idtrait from t_traitements where id_patient = :ll_patient and phase = 0;
-
-ll_ret = dw_dossfin.retrieve(ll_patient,ll_idtrait) 
-
-dw_dossfin.SetRedraw(True)
 end event
-
-type gb_2 from groupbox within w_main
-integer x = 1819
-integer y = 12
-integer width = 3730
-integer height = 1244
-integer taborder = 10
-integer textsize = -10
-integer weight = 400
-fontcharset fontcharset = ansi!
-fontpitch fontpitch = variable!
-fontfamily fontfamily = swiss!
-string facename = "Tahoma"
-long textcolor = 33554432
-long backcolor = 553648127
-string text = "Liste des factures du patient sélectionné"
-end type
 
 type gb_3 from groupbox within w_main
 boolean visible = false
 integer x = 1888
-integer y = 2508
+integer y = 2616
 integer width = 960
 integer height = 160
 integer taborder = 30
@@ -961,8 +1136,8 @@ end type
 
 type gb_1 from groupbox within w_main
 integer x = 1819
-integer y = 1292
-integer width = 3730
+integer y = 1412
+integer width = 3749
 integer height = 1208
 integer taborder = 10
 integer textsize = -10

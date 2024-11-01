@@ -77,7 +77,7 @@ on n_cst_appmanager.destroy
 call super::destroy
 end on
 
-event constructor;call super::constructor;is_version = "1.0.0.1"
+event constructor;call super::constructor;is_version = "1.0.0.2"
 inv_entrepotglobal = Create pro_n_cst_entrepotglobal 
 end event
 

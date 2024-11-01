@@ -7989,7 +7989,7 @@ ls_ordi = gnv_app.of_obtenir_nom_ordinateur( )
 ll_iduser = long(gnv_app.of_getuserid())
 		
 // Validation des erreurs
-IF isnull(il_idvisit) or il_idvisit = 0 THEN return -1
+IF (isnull(il_idvisit) or il_idvisit = 0) and (isnull(il_idplan) or il_idplan = 0) THEN return -1
 IF isnull(il_idcarrier1) or il_idcarrier1 = 0 THEN return -2
 
 // On regarde si on peut envoyer ces infos au assurance
@@ -8312,7 +8312,7 @@ values(:ldtt_datetime,'09',:ls_offseqnum,:ls_fichnomin,'4',:ll_idvisit,:il_idspe
 if gf_sqlerr() then
 	select max(id_assentete) into :ll_idassentete 
 	from t_assentete 
-	WHERE id_visit = :il_idvisit AND
+	WHERE (id_visit = :il_idvisit or id_plantraitement = :ll_idplan) AND
 			id_patient = :il_patid AND
 			id_specialist = :il_idspec;
 else
